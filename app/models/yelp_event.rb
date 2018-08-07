@@ -1,0 +1,2 @@
+class YelpEvent < ApplicationRecord
+end

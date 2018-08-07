@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_06_174149) do
+ActiveRecord::Schema.define(version: 2018_08_07_140458) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -40,6 +40,28 @@ ActiveRecord::Schema.define(version: 2018_08_06_174149) do
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  end
+
+  create_table "yelp_events", force: :cascade do |t|
+    t.string "yelp_event_id"
+    t.string "business_id"
+    t.string "name"
+    t.string "description"
+    t.string "display_address"
+    t.string "image_url"
+    t.string "date"
+    t.string "time"
+    t.boolean "cancelled"
+    t.string "cost"
+    t.boolean "is_free"
+    t.boolean "tickets_required"
+    t.string "tickets_url"
+    t.string "category"
+    t.boolean "save_offline"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["business_id"], name: "index_yelp_events_on_business_id"
+    t.index ["category"], name: "index_yelp_events_on_category"
   end
 
 end
