@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_07_140458) do
+ActiveRecord::Schema.define(version: 2018_08_08_194826) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -57,11 +57,15 @@ ActiveRecord::Schema.define(version: 2018_08_07_140458) do
     t.boolean "tickets_required"
     t.string "tickets_url"
     t.string "category"
-    t.boolean "save_offline"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "saved"
+    t.boolean "attending"
+    t.bigint "user_id"
     t.index ["business_id"], name: "index_yelp_events_on_business_id"
     t.index ["category"], name: "index_yelp_events_on_category"
+    t.index ["user_id"], name: "index_yelp_events_on_user_id"
   end
 
+  add_foreign_key "yelp_events", "users"
 end
