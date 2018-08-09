@@ -1,0 +1,30 @@
+<% @response["events"].each do |e| %>
+<div class="event-wrapper">
+  <div class="sideboard">
+    <div class="image"><img width="200" height="200" src=<%= e['image_url'] %> ></div>
+    <div class="attend-saved">
+      <%= radio_button("event", "action", "save") %>
+      <%= label_tag "event_action_save", "Save" %>
+      <%= radio_button("event", "action", "attend") %>
+      <%= label_tag "event_action_attend", "Attend" %>
+      <input type="hidden" value=<%= e['id'] %>>
+    </div>
+  </div>
+  <div class="info">
+    <% if e['event_site_url'].blank? %>
+      <p><%= e['name'] %></p>
+    <% else %>
+      <p><%= link_to "#{e['name']}", "#{e['event_site_url']}" %></p>
+    <% end %>
+    <p><%= e['description'] %></p>
+    <p>Address:</p>
+    <p><%= get_address(e['location']['display_address'][0]) %></p>
+    <p><%= get_city_state_zip(e['location']['display_address'][0]) %></p>
+    <p>Date & Time: <%= format_date_time(e['time_start'], e['time_end']) %></p>
+    <p>Cost: <%= pad_cost(e['cost']) %></p>
+    <% if !e['tickets_url'].blank? %>
+      <p><%= link_to 'Tickets', "#{e['tickets_url']}" %></p>
+    <% end %>
+  </div>
+</div>
+<% end %>

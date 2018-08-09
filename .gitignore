@@ -6,6 +6,7 @@
 
 # Ignore bundler config.
 /.bundle
+yelp-fusion/
 
 # Ignore all logfiles and tempfiles.
 /log/*
