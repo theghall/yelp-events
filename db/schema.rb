@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_08_194826) do
+ActiveRecord::Schema.define(version: 2018_08_10_194644) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -49,8 +49,8 @@ ActiveRecord::Schema.define(version: 2018_08_08_194826) do
     t.string "description"
     t.string "display_address"
     t.string "image_url"
-    t.string "date"
-    t.string "time"
+    t.string "start_date"
+    t.string "start_time"
     t.boolean "cancelled"
     t.string "cost"
     t.boolean "is_free"
@@ -59,12 +59,14 @@ ActiveRecord::Schema.define(version: 2018_08_08_194826) do
     t.string "category"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "saved"
     t.boolean "attending"
     t.bigint "user_id"
+    t.string "end_date"
+    t.string "end_time"
     t.index ["business_id"], name: "index_yelp_events_on_business_id"
     t.index ["category"], name: "index_yelp_events_on_category"
     t.index ["user_id"], name: "index_yelp_events_on_user_id"
+    t.index ["yelp_event_id", "start_date"], name: "index_yelp_events_on_yelp_event_id_and_start_date", unique: true
   end
 
   add_foreign_key "yelp_events", "users"
