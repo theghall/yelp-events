@@ -18,13 +18,48 @@ class EventsController < ApplicationController
 
     response = get_event(event_id)
 
-    is_free = (response['is_free'] == 'true' ? true : false)
-    cancelled = (response['is_canceled'] == 'true' ? true : false)
-
     error = false
 
-    # TODO: break out and keep one render per action
     begin
+      create_record(response, attending)
+    rescue
+     error = true
+    end
+
+    if error
+      head :internal_server_error
+    else
+      head :ok
+    end
+  end
+
+  private
+
+    def yelp_params
+      params.require(:yelp).permit(:attending, :category, :event_id, :zip)
+    end
+
+    def get_event(yelp_event_id)
+      url = "#{API_HOST}#{SEARCH_PATH}/#{yelp_event_id}"
+      HTTP.auth("Bearer #{API_KEY}").get(url).parse(:json)
+    end
+
+    def search(term, location)
+      url = "#{API_HOST}#{SEARCH_PATH}"
+      start_date = "#{Time.now.to_i}"
+      params = {
+        term: term,
+        location: location,
+      }
+
+      response = HTTP.auth("Bearer #{API_KEY}").get(url, params: params)
+      response.parse
+    end
+
+    def create_record(response, attending)
+      is_free = (response['is_free'] == 'true' ? true : false)
+      cancelled = (response['is_canceled'] == 'true' ? true : false)
+    
       current_user.yelp_events.build(
         yelp_event_id: response['id'],
         business_id: response['business_id'],
@@ -43,37 +78,6 @@ class EventsController < ApplicationController
         category: response['category'],
         attending: attending
       ).save!
-    rescue
-      error = true
     end
 
-    if (error)
-      render plain: "ERR", status: :internal_server_error
-    else
-      render plain: "OK", status: :ok
-    end
-  end
-
-  private
-
-  def yelp_params
-    params.require(:yelp).permit(:attending, :category, :event_id, :zip)
-  end
-
-  def get_event(yelp_event_id)
-    url = "#{API_HOST}#{SEARCH_PATH}/#{yelp_event_id}"
-    HTTP.auth("Bearer #{API_KEY}").get(url).parse(:json)
-  end
-
-  def search(term, location)
-    url = "#{API_HOST}#{SEARCH_PATH}"
-    start_date = "#{Time.now.to_i}"
-    params = {
-      term: term,
-      location: location,
-    }
-
-    response = HTTP.auth("Bearer #{API_KEY}").get(url, params: params)
-    response.parse
-  end
 end
