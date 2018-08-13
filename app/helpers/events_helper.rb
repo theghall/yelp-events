@@ -50,4 +50,10 @@ module EventsHelper
       return start_date_time.strftime("%b %d, %Y %l%p") + " to " + end_date_time.strftime("%l%p")
     end
   end
+
+  def getAttending(event_id, start_date)
+    relation = YelpEvent.select(:attending).where(yelp_event_id: event_id, start_date: start_date)
+
+    relation.empty? ? nil : relation.first.attending
+  end
 end

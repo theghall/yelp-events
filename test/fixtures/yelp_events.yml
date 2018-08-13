@@ -1,0 +1,3 @@
+an_event:
+  yelp_event_id: 'an-yelp-event'
+  description: 'description'

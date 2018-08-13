@@ -1,13 +1,19 @@
+<% count = 1 %>
 <% @response["events"].each do |e| %>
 <div class="event-wrapper">
   <div class="sideboard">
     <div class="image"><img width="200" height="200" src=<%= e['image_url'] %> ></div>
-    <div class="attend-saved">
-      <%= radio_button("event", "action", "save") %>
-      <%= label_tag "event_action_save", "Save" %>
-      <%= radio_button("event", "action", "attend") %>
-      <%= label_tag "event_action_attend", "Attend" %>
-      <input type="hidden" value=<%= e['id'] %>>
+    <div class="attending" id="<%= e['id']  + "_#{count}" %>" >
+      <% attending = getAttending(e['id'], e['time_start'].split(' ')[0]) %>
+      <% if attending == nil %>
+        <p>Attend?</p>
+        <%= radio_button("event", "attend", "maybe") %>
+        <%= label_tag "event_attend_maybe", "Maybe" %>
+        <%= radio_button("event", "attend", "yes") %>
+        <%= label_tag "event_attend_yes", "Yes" %>
+      <% else %>
+        <p><%= "Attending: #{attending}" %></p>
+      <% end %>
     </div>
   </div>
   <div class="info">
@@ -27,4 +33,5 @@
     <% end %>
   </div>
 </div>
+<% count = count + 1 %>
 <% end %>

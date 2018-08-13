@@ -1,0 +1,107 @@
+function flash(type, message) {
+  const flashElem = document.getElementsByClassName(type);
+  flashElem[0].textContent = message;
+}
+
+function clearFlash() {
+  flash('notice', '');
+  flash('alert', '');
+}
+
+function displayAttending(eventId, attending) {
+  const node = document.getElementById(eventId);
+
+  while (node.firstChild) {
+    node.removeChild(node.firstChild);
+  }
+
+  p = document.createElement('p');
+  p.textContent = `Attending: ${attending}`;
+
+  node.appendChild(p);
+}
+
+function buildPostBody(yelpEventId, attending) {
+  const searchParams = new URLSearchParams();
+
+  searchParams.append('yelp[event_id]', yelpEventId.split('_')[0]);
+  searchParams.append('yelp[attending]', attending);
+
+  return searchParams;
+}
+
+async function postYelpEvent(yelpEventId, attending) {
+
+  clearFlash();
+  flash('notice', 'Updating...');
+
+  try {
+    const response = await fetch("<%= Rails.application.routes.url_helpers.events_path %>",
+      {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
+          'X-CSRF-Token': document.querySelector("meta[name='csrf-token']").getAttribute("content"),
+        },
+        credentials: 'same-origin',
+        body: buildPostBody(yelpEventId, attending)
+       });
+
+    if (response.ok) {
+      clearFlash();
+      displayAttending(yelpEventId, attending);
+    } else {
+      clearFlash();
+      flash('alert', 'There was an error saving your attendence preference');
+      console.log(response);
+    }
+
+  } catch(err) {
+    console.log(err);
+  }
+
+}
+
+function radioHandler(e) {
+  const elemId = e.target.id;
+
+  let attending = '';
+
+  switch (elemId) {
+    case 'event_attend_yes':
+      attending = 'yes';
+      break;
+    case 'event_attend_maybe':
+      attending = 'maybe';
+      break;
+  }
+
+  const parentElemId = e.target.parentElement.id;
+
+  const yelpEventId = parentElemId;
+
+  postYelpEvent(yelpEventId, attending);
+}
+
+function windowClickHandler(e) {
+
+  const type = e.target.getAttribute('type');
+
+  switch (type) {
+    case 'radio':
+      radioHandler(e);
+      break;
+  }
+}
+
+function setWindowListener() {
+  window.addEventListener('click', windowClickHandler);
+}
+
+function ready() {
+  setWindowListener();
+}
+
+function r(readyFunc){/in/.test(document.readyState)?setTimeout('r('+readyFunc+')',9):readyFunc()}
+
+r(ready);
