@@ -84,9 +84,8 @@ class EventFlowTest < ActionDispatch::IntegrationTest
      post events_path, params: {yelp: {event_id: "#{event_id}", attending: "#{attending}"} }
     end
 
-    assert_raises do
-     post events_path, params: {yelp: {event_id: "#{event_id}", attending: "#{attending}"} }
-    end
+    post events_path, params: {yelp: {event_id: "#{event_id}", attending: "#{attending}"} }
+    assert_response :error
 
   end
 end
