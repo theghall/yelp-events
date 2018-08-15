@@ -9,6 +9,8 @@ gem 'rails', '~> 5.2.0'
 gem 'pg', '>= 0.18', '< 2.0'
 # Use Puma as the app server
 gem 'puma', '~> 3.11'
+# Need this for service workers to work with Rails
+gem 'serviceworker-rails'
 # Use SCSS for stylesheets
 gem 'sassc-rails', '1.3.0'
 

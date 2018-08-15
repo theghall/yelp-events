@@ -1,0 +1,12 @@
+const staticCacheName = 'staticfiles';
+
+function handleInstallEvent(event) {
+  event.waitUntil(async function() {
+    const staticCache = await caches.open(staticCacheName);
+    return staticCache.addAll([
+      '<%= asset_path "style.css" %>'
+    ]);
+  }());
+}
+
+addEventListener('install', handleInstallEvent);
