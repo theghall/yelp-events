@@ -1,12 +1,66 @@
-const staticCacheName = 'staticfiles';
+const staticVersion = 'V2.9';
+const offlineVersion = 'V1.9'
+
+const staticCacheName = 'staticfiles' + staticVersion;
+const offlinePageCache = 'offlinepage' + offlineVersion;
 
 function handleInstallEvent(event) {
+  const offlineEventUrl = "<%= Rails.application.routes.url_helpers.offline_events_path %>";
+
+  skipWaiting();
+
   event.waitUntil(async function() {
     const staticCache = await caches.open(staticCacheName);
     return staticCache.addAll([
-      '<%= asset_path "style.css" %>'
+      '<%= asset_path "application.css" %>',
+      '<%= asset_path "events.jpg" %>',
     ]);
+  }());
+
+  event.waitUntil(async function() {
+    const cacheOpen = await caches.open(offlinePageCache);
+    return cacheOpen.add(new Request(offlineEventUrl, { headers: {Accept: 'text/html'}, credentials: 'same-origin'}));
   }());
 }
 
+function handleActivateEvent(event) {
+  event.waitUntil(async function() {
+    const keys = await caches.keys();
+    return Promise.all(keys.map(cacheName => {
+      if (cacheName != staticCacheName && cacheName != offlinePageCache) {
+        return caches.delete(cacheName);
+      }
+    }));
+  }());
+}
+
+function handleFetchEvent(event) {
+  const postEventUrl = "<%= Rails.application.routes.url_helpers.events_path %>";
+  const offlineEventUrl = "<%= Rails.application.routes.url_helpers.offline_events_path %>";
+  const request = event.request;
+
+  event.respondWith( async function() {
+    // See if we can get the resource from the cache
+    cacheResponse = await caches.match(request);
+    if (cacheResponse) {
+      return cacheResponse;
+    }
+    // Let fetch try and get the resource if above fails
+    try {
+      const fetchResponse = await fetch(request); 
+      // Save offline events page if db was updated
+      if (fetchResponse.ok && request.url.includes(postEventUrl) && request.method == 'POST') {
+        const cacheOpen = await caches.open(offlinePageCache);
+        cacheOpen.add(new Request(offlineEventUrl, { headers: {Accept: 'text/html'}, credentials: 'same-origin'}));
+      }
+      return fetchResponse;
+    } catch {
+      // Show user the offline page if fetch fails to retrieve resource
+      return caches.match('offline_events');
+    }
+  }());
+} 
+
 addEventListener('install', handleInstallEvent);
+addEventListener('activate', handleActivateEvent);
+addEventListener('fetch', handleFetchEvent);

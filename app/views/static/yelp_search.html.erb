@@ -1,7 +1,9 @@
-<%= form_tag({action: :index, controller: :events},{ method: :get }) do %>
-<%= label_tag :category, 'Category' %>
-<%= text_field_tag 'yelp[category]', "Enter category", html: { autofocus: true }  %>
-<%= label_tag :zipcode, 'Zip Code' %>
-<%= text_field_tag 'yelp[zip]' %>
-<%= submit_tag 'Search', id: 'yelp-search' %>
-<% end %>
+<div id="yelp-search">
+  <%= form_tag({action: :index, controller: :events},{ method: :get }) do %>
+  <%= label_tag :category, 'Category' %>
+  <%= text_field_tag 'yelp[category]', nil, autofocus: true %>
+  <%= label_tag :zipcode, 'Zip Code' %>
+  <%= text_field_tag 'yelp[zip]' %>
+  <%= submit_tag 'Search', class: 'btn' %>
+  <% end %>
+</div>

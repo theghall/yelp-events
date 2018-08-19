@@ -9,8 +9,14 @@ class EventFlowTest < ActionDispatch::IntegrationTest
     @user = users(:john)
   end
 
-  test "it should display login page" do
+  test "it should display login page when getting root url if not signed in" do
     get root_url
+    follow_redirect!
+    assert_template "devise/sessions/new"
+  end
+
+  test "it should display login page when getting offline_events url if not signed in" do
+    get offline_events_url
     follow_redirect!
     assert_template "devise/sessions/new"
   end
@@ -87,5 +93,11 @@ class EventFlowTest < ActionDispatch::IntegrationTest
     post events_path, params: {yelp: {event_id: "#{event_id}", attending: "#{attending}"} }
     assert_response :error
 
+  end
+
+  test "it should display OfflineEvents/index template" do
+    sign_in @user
+    get offline_events_path
+    assert_template "offline_events/index"
   end
 end

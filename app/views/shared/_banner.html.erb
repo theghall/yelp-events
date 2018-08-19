@@ -1,0 +1,15 @@
+<div id="banner">
+  <div id="top">
+    <div id="menu">
+      <% if controller_name != 'offline_events' %>
+        <%= link_to "Home", root_url %><%= link_to "Search", yelp_search_path %>
+      <% end %>
+    </div>
+    <div id="app-name">Yelp Event Assistant</div>
+    <div id="right"></div>
+  </div>
+  <div id="bottom">
+    <p class="notice"><%= notice %></p>
+    <p class="alert"><%= alert %></p>
+  </div>
+</div>

@@ -1,0 +1,2 @@
+module OfflineEventsHelper
+end

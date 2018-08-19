@@ -12,7 +12,6 @@ class EventsController < ApplicationController
   end
 
   def create
-
     event_id = yelp_params[:event_id]
     attending = yelp_params[:attending]
 
@@ -29,7 +28,6 @@ class EventsController < ApplicationController
     if error
       head :internal_server_error
     else
-      create_offline_html
       head :ok
     end
   end
