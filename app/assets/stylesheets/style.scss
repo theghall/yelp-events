@@ -47,6 +47,18 @@ input {
   height: 25px;
 }
 
+#login,
+#signup,
+#confirmation,
+#new-password {
+  background: $sunshine;
+  width: 400px;
+  margin: 0 auto;
+  border: 1px solid black;
+  border-radius: 5px;
+  box-shadow: 5px 10px grey;
+}
+
 #banner {
   display: grid;
   width: 100%;
