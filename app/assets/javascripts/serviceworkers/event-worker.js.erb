@@ -1,4 +1,4 @@
-const staticVersion = 'V2.95';
+const staticVersion = 'V2.96';
 const offlineVersion = 'V1.9'
 
 const staticCacheName = 'staticfiles' + staticVersion;
@@ -26,11 +26,13 @@ function handleInstallEvent(event) {
 function handleActivateEvent(event) {
   event.waitUntil(async function() {
     const keys = await caches.keys();
-    return Promise.all(keys.map(cacheName => {
+    await Promise.all(keys.map(cacheName => {
       if (cacheName != staticCacheName && cacheName != offlinePageCache) {
         return caches.delete(cacheName);
       }
     }));
+    //  Take control of open tab immediately 
+    return clients.claim();
   }());
 }
 
