@@ -1,5 +1,5 @@
 if (navigator.serviceWorker) {
-  navigator.serviceWorker.register('/event-worker.js', { scope: './'})
+  navigator.serviceWorker.register('/event-worker.js', { scope: '/'})
     .then(function(reg) {
       console.log('event-worker registered');
     })
