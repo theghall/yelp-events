@@ -2,7 +2,9 @@
   <div id="top">
     <div id="menu">
       <% if controller_name != 'offline_events' %>
-        <%= link_to "Home", root_url %><%= link_to "Search", yelp_search_path %>
+        <%= link_to "Home", root_url %>
+        <%= link_to "Search", yelp_search_path %>
+        <%= link_to "Logout", destroy_user_session_path, method: :delete %>
       <% end %>
     </div>
     <div id="app-name">Yelp Event Assistant</div>
