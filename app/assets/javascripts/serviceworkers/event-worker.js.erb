@@ -53,7 +53,7 @@ function handleFetchEvent(event) {
       // Save offline events page if db was updated
       if (fetchResponse.ok && request.url.includes(postEventUrl) && request.method == 'POST') {
         const cacheOpen = await caches.open(offlinePageCache);
-        cacheOpen.add(new Request(offlineEventUrl, { headers: {Accept: 'text/html'}, credentials: 'same-origin'}));
+        await cacheOpen.add(new Request(offlineEventUrl, { headers: {Accept: 'text/html'}, credentials: 'same-origin'}));
       }
       return fetchResponse;
     } catch {
