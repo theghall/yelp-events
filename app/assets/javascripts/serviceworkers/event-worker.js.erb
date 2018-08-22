@@ -56,7 +56,7 @@ function handleFetchEvent(event) {
         await cacheOpen.add(new Request(offlineEventUrl, { headers: {Accept: 'text/html'}, credentials: 'same-origin'}));
       }
       return fetchResponse;
-    } catch {
+    } catch(err) {
       // Show user the offline page if fetch fails to retrieve resource
       return caches.match('offline_events');
     }
