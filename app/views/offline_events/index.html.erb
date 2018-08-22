@@ -1,18 +1,8 @@
-<h3>You appear to be offline. Here are your next three upcoming events that you are planning to attend</h3>
+<h3>You appear to be offline. Here are some upcoming events that you are planning to attend</h3>
 <div id="offline-wrapper">
   <% @events.each do |event| %>
     <div class="event-wrapper">
-      <div class="info">
-        <p><%= "#{event.name}" %></p>
-        <p><%= "#{event.description}" %></p>
-        <p>Address:</p>
-        <p><%= "#{get_address(event.display_address)}" %></p>
-        <p><%= "#{get_city_state_zip(event.display_address)}" %></p>
-        <% start_date = event.start_date + " " + event.start_time %>
-        <% end_date = event.end_date + " " + event.end_time %>
-        <p>Date & Time: <%= "#{format_date_time(start_date, end_date)}"%></p>
-        <p>Cost: <%= "#{pad_cost(event.cost)}" %></p>
-      </div>
+      <%= render "shared/info", :event => event %>
     </div>
   <% end %>
 </end>
