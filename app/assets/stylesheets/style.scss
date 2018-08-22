@@ -133,6 +133,7 @@ input {
 }
 
 .event-wrapper {
+  background: $sunshine;
   display: grid;
   grid-template-columns: $sideboard_width $info_wrapper_width;
   grid-template-rows: $sideboard_height;
