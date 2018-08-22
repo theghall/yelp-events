@@ -1,0 +1,11 @@
+<div class="info">
+  <p><%= "#{event.name}" %></p>
+  <p><%= "#{event.description}" %></p>
+  <p>Address:</p>
+  <p><%= "#{get_address(event.display_address)}" %></p>
+  <p><%= "#{get_city_state_zip(event.display_address)}" %></p>
+  <% start_date = event.start_date + " " + event.start_time %>
+  <% end_date = event.end_date + " " + event.end_time %>
+  <p>Date & Time: <%= "#{format_date_time(start_date, end_date)}"%></p>
+  <p>Cost: <%= "#{pad_cost(event.cost)}" %></p>
+</div>

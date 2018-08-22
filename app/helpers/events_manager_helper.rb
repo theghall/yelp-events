@@ -1,0 +1,2 @@
+module EventsManagerHelper
+end

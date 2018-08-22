@@ -1,0 +1,11 @@
+<% @events.each do |event| %>
+<div class="event-wrapper">
+  <div class="sideboard">
+    <div class="image"><img width="200" height="200" src=<%= event.image_url %> ></div>
+    <div class="attending">
+      <p><%= "Attending: #{event.attending}" %></p>
+    </div>
+  </div>
+  <%= render "shared/info", :event => event %>
+</div>
+<% end %>
