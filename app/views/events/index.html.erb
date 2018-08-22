@@ -2,7 +2,7 @@
 <% @response["events"].each do |e| %>
 <div class="event-wrapper">
   <div class="sideboard">
-    <div class="image"><img width="200" height="200" src=<%= e['image_url'] %> ></div>
+    <div class="image"><%= image_tag e['image_url'], size: "200x200", alt: "Event Image" %></div>
     <div class="attending" id="<%= e['id']  + "_#{count}" %>" >
       <% attending = getAttending(e['id'], e['time_start'].split(' ')[0]) %>
       <% if attending == nil %>

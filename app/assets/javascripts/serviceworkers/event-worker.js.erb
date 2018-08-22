@@ -39,6 +39,8 @@ function handleActivateEvent(event) {
 function handleFetchEvent(event) {
   const postEventUrl = "<%= Rails.application.routes.url_helpers.events_path %>";
   const offlineEventUrl = "<%= Rails.application.routes.url_helpers.offline_events_path %>";
+  const yelpCDN = 'yelpcdn';
+
   const request = event.request;
 
   event.respondWith( async function() {
@@ -49,11 +51,22 @@ function handleFetchEvent(event) {
     }
     // Let fetch try and get the resource if above fails
     try {
-      const fetchResponse = await fetch(request); 
+      let fetchResponse = null;
+
+      // Need to do CORS to avoid opaque response; omit credentials since 
+      // Allow-Access-Control-Origin is *
+      if (request.url.includes(yelpCDN) && request.destination.includes('image')) {
+        fetchResponse = await fetch(request, { mode: 'cors', credentials: 'omit'});
+      } else {
+        fetchResponse = await fetch(request); 
+      }
       // Save offline events page if db was updated
       if (fetchResponse.ok && request.url.includes(postEventUrl) && request.method == 'POST') {
         const cacheOpen = await caches.open(offlinePageCache);
         await cacheOpen.add(new Request(offlineEventUrl, { headers: {Accept: 'text/html'}, credentials: 'same-origin'}));
+      } else if (!fetchResponse.ok && request.url.includes(yelpCDN) && request.destination.includes('image')) {
+        // Replace broken image with this
+        return await fetch('/default.jpg');
       }
       return fetchResponse;
     } catch(err) {
