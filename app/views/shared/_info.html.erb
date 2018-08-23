@@ -5,7 +5,8 @@
   <p><%= "#{get_address(event.display_address)}" %></p>
   <p><%= "#{get_city_state_zip(event.display_address)}" %></p>
   <% start_date = event.start_date + " " + event.start_time %>
-  <% end_date = event.end_date + " " + event.end_time %>
+  <% end_date = nil %>
+  <% end_date = event.end_date + " " + event.end_time unless event.end_date.nil? %>
   <p>Date & Time: <%= "#{format_date_time(start_date, end_date)}"%></p>
   <p>Cost: <%= "#{pad_cost(event.cost)}" %></p>
 </div>

@@ -63,7 +63,15 @@ class EventsController < ApplicationController
     def create_record(response, attending)
       is_free = (response['is_free'] == 'true' ? true : false)
       cancelled = (response['is_canceled'] == 'true' ? true : false)
-    
+   
+      if response['time_end'].nil?
+        end_date = nil
+        end_time = nil
+      else
+        end_date = response['time_end'].split(' ')[0]
+        end_time = response['time_end'].split(' ')[1]
+      end
+
       current_user.yelp_events.build(
         yelp_event_id: response['id'],
         business_id: response['business_id'],
@@ -73,8 +81,8 @@ class EventsController < ApplicationController
         image_url: response['image_url'],
         start_date: response['time_start'].split(' ')[0],
         start_time: response['time_start'].split(' ')[1],
-        end_date: response['time_end'].split(' ')[0],
-        end_time: response['time_end'].split(' ')[1],
+        end_date: end_date,
+        end_time: end_time,
         cancelled: cancelled,
         cost: response['cost'],
         is_free: is_free,
