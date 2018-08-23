@@ -9,6 +9,11 @@ class EventsController < ApplicationController
 
   @response = search(yelp_params[:category], yelp_params[:zip])
 
+  if (@response["total"] == 0)
+    flash[:notice] = "No events were found matching that search criteria"
+    return
+  end
+
   end
 
   def create
