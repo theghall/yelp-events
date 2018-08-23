@@ -20,6 +20,8 @@ module EventsHelper
 
     if address_split.length <= 1
       return ''
+    elsif address_split.length == 2
+      return address_split[0] + ',' + address_split[1]
     else
       return address_split[1] + ',' + address_split[2]
     end
