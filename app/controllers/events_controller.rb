@@ -83,39 +83,4 @@ class EventsController < ApplicationController
         attending: attending
       ).save!
     end
-
-    def write_offline_event(file, event)
-      file.write('<div class="info">')
-      file.write("<p>#{event.name}</p>")
-      file.write("<p>#{event.description}</p>")
-      file.write("<p>#{get_address(event.display_address)}</p>")
-      file.write("<p>#{get_city_state_zip(event.display_address)}</p>")
-
-      start_date = event.start_date + " " + event.start_time
-      end_date = event.end_date + " " + event.end_time
-
-      file.write("<p>Date & Time: #{format_date_time(start_date, end_date)}</p>")
-      file.write("<p>Cost: #{pad_cost(event.cost)}</p>")
-    end
-
-    def create_offline_html
-      path = Rails.public_path.join('offline.html').to_s
-
-      File.open(path, "w+") do |f|
-        f.write("<!DOCTYPE html>")
-        f.write('<html lang="en">')
-        f.write("<head>")
-        f.write('<meta charset="utf-8">')
-        f.write('<meta name="viewport" content="width=device-width, initial-scale=1">')
-        f.write("<title>Yelp Event Assistant | Offline</title>")
-        f.write("</head>")
-        f.write("<body>")
-        YelpEvent.attending_yes.limit(3).each do |event|
-          write_offline_event(f, event)
-        end
-        f.write("</body>")
-        f.write("</html>")
-      end
-    end
-
 end
