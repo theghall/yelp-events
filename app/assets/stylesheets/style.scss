@@ -107,12 +107,16 @@ input {
 #main-menu {
   background: $vermillion;
   color: black;
-  width: 200px;
+  width: 275px;
   border: 1px solid black;
   margin: 0 auto;
   border-radius: 5px;
   position: sticky;
   top: $banner_height + 100px;
+}
+
+#main-menu ul {
+  list-style: none;
 }
 
 #yelp-search {
