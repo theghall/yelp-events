@@ -12,6 +12,5 @@
 //
 //= require rails-ujs
 //= require activestorage
-//= require turbolinks
 //= require ./yelp-events.js.erb
 //= require ./serviceworker-companion.js
