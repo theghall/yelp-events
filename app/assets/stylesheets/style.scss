@@ -1,3 +1,4 @@
+/****************************** begin style.css ******************************/
 $fresh: #4abdac;
 $vermillion:  #fc4a1a;
 $sunshine: #f7b733;
@@ -14,6 +15,10 @@ $event_wrapper_height: $sideboard_height;
 $banner_top_height: 30px; 
 $banner_bottom_height: 50px;
 $banner_height: $banner_top_height + $banner_bottom_height;
+
+* {
+  box-sizing: border-box;
+}
 
 body {
   font-family: Garamond, serif;
@@ -204,3 +209,10 @@ input {
     margin-bottom: 3px;
   }
 }
+
+#offline-msg {
+  font-weight: bold;
+  font-size: 20px;
+  margin-bottom: 5px;
+}
+/****************************** style.css ******************************/
