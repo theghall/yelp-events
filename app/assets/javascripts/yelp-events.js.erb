@@ -95,12 +95,21 @@ function windowClickHandler(e) {
   }
 }
 
-function setWindowListener() {
+function handleLoadEvent(e) {
+  console.log(e);
+}
+
+function setWindowListeners() {
   window.addEventListener('click', windowClickHandler);
 }
 
+function setBodyListeners() {
+  document.body.addEventListener('load', handleLoadEvent, true);
+}
+
 function ready() {
-  setWindowListener();
+  setWindowListeners();
+  setBodyListeners();
 }
 
 function r(readyFunc){/in/.test(document.readyState)?setTimeout('r('+readyFunc+')',9):readyFunc()}

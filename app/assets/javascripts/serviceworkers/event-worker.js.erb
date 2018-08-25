@@ -46,6 +46,11 @@ function handleFetchEvent(event) {
 
   const request = event.request;
 
+  // Browser will handle broken images
+  if (isYelpImg(request)) {
+    return;
+  }
+
   event.respondWith( async function() {
     // See if we can get the resource from the cache
     cacheResponse = await caches.match(request);
@@ -54,23 +59,14 @@ function handleFetchEvent(event) {
     }
     // Let fetch try and get the resource if above fails
     try {
-      let fetchResponse = null;
+      const fetchResponse = await fetch(request); 
 
-      // Need to do CORS to avoid opaque response; omit credentials since 
-      // Allow-Access-Control-Origin is *
-      if (isYelpImg(request)) {
-        fetchResponse = await fetch(request, { mode: 'cors', credentials: 'omit'});
-      } else {
-        fetchResponse = await fetch(request); 
-      }
       // Save offline events page if db was updated
       if (fetchResponse.ok && request.url.includes(postEventUrl) && request.method == 'POST') {
         const cacheOpen = await caches.open(offlinePageCache);
         await cacheOpen.add(new Request(offlineEventUrl, { headers: {Accept: 'text/html'}, credentials: 'same-origin'}));
-      } else if (!fetchResponse.ok && isYelpImg(request)) {
-        // Replace broken image with this
-        return await fetch('/default.jpg');
       }
+
       return fetchResponse;
     } catch(err) {
       // Show user the offline page if fetch fails to retrieve resource
