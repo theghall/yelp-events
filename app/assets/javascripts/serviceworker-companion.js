@@ -1,11 +1,14 @@
 function isLoggedIn() {
-  const signinDiv = document.getElementById('login');
+  let loggedIn = false;
+  // Check for signed_in cookie created by Warden (see devise.rb)
+  const result = document.cookie.match('(^|;)\\s*' + 'signed_in' + '\\s*=\\s*([^;]+)')
 
-  if (signinDiv === null) {
-    return true;
-  } else {
-    return false;
+  if (result && result[2] === '1') {
+    loggedIn = true;
   }
+
+  return loggedIn;
+
 }
 
 // Tell serviceworker to check if offline page needs to be created/updated
