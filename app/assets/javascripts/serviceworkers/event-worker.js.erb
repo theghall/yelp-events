@@ -16,11 +16,6 @@ function handleInstallEvent(event) {
       '<%= asset_path "events.jpg" %>',
     ]);
   }());
-
-  event.waitUntil(async function() {
-    const cacheOpen = await caches.open(offlinePageCache);
-    return cacheOpen.add(new Request(offlineEventUrl, { headers: {Accept: 'text/html'}, credentials: 'same-origin'}));
-  }());
 }
 
 function handleActivateEvent(event) {
@@ -40,9 +35,15 @@ function isYelpImg(request) {
   return request.url.includes('yelpcdn') && request.destination.includes('image')
 }
 
+// TODO: only create after event post or if user logs in and the offlinePageCache is a new version
+async function createOfflinePage() {
+  const offlineEventUrl = "<%= Rails.application.routes.url_helpers.offline_events_path %>";
+  const cacheOpen = await caches.open(offlinePageCache);
+  await cacheOpen.add(new Request(offlineEventUrl, { headers: {Accept: 'text/html'}, credentials: 'same-origin'}));
+}
+
 function handleFetchEvent(event) {
   const postEventUrl = "<%= Rails.application.routes.url_helpers.events_path %>";
-  const offlineEventUrl = "<%= Rails.application.routes.url_helpers.offline_events_path %>";
 
   const request = event.request;
 
@@ -63,8 +64,7 @@ function handleFetchEvent(event) {
 
       // Save offline events page if db was updated
       if (fetchResponse.ok && request.url.includes(postEventUrl) && request.method == 'POST') {
-        const cacheOpen = await caches.open(offlinePageCache);
-        await cacheOpen.add(new Request(offlineEventUrl, { headers: {Accept: 'text/html'}, credentials: 'same-origin'}));
+        createOfflinePage();
       }
 
       return fetchResponse;
@@ -75,6 +75,19 @@ function handleFetchEvent(event) {
   }());
 } 
 
+function handleMessageEvent(event) {
+  event.waitUntil( async function() {
+    switch (event.data) {
+      case 'create offline page':
+        await createOfflinePage();
+        break;
+      default:
+        break;
+    }
+  }());
+}
+
 addEventListener('install', handleInstallEvent);
 addEventListener('activate', handleActivateEvent);
 addEventListener('fetch', handleFetchEvent);
+addEventListener('message', handleMessageEvent);
