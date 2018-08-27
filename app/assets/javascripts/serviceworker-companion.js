@@ -18,20 +18,23 @@ function sendCreateOfflinePageMessage() {
   }
 }
 
-// If browser supprts service workers register our service worker
-if (navigator.serviceWorker) {
-  // TODO: refactor to use async/await
-  navigator.serviceWorker.register('/event-worker.js', { scope: '/'})
-    .then(function(reg) {
-      console.log('event-worker registered');
-      if (navigator.serviceWorker.controller) {
-        // Recreate the offline page when user logs in
-        // TODO: restrict to root page
-        window.addEventListener('load', sendCreateOfflinePageMessage);
-        window.addEventListener('turbolinks:load', sendCreateOfflinePageMessage);
-      }
-    }())
-    .catch(function(err) {
+async function registerWorker() {
+  // If browser supprts service workers register our service worker
+  if (navigator.serviceWorker) {
+    try {
+        const reg = await navigator.serviceWorker.register('/event-worker.js', { scope: '/'});
+        const installed = await reg;
+        console.log('event-worker registered', installed);
+        if (navigator.serviceWorker.controller) {
+          // Recreate the offline page when user logs in
+          // TODO: restrict to root page
+          window.addEventListener('load', sendCreateOfflinePageMessage);
+          window.addEventListener('turbolinks:load', sendCreateOfflinePageMessage);
+        }
+    } catch(err) {
       console.log('event-worker registration failed: ', err);
-    });
+    }
+  }
 }
+
+registerWorker();
