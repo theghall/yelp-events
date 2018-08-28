@@ -1,8 +1,10 @@
-const staticVersion = 'V3.2'
-const offlineVersion = 'V2.3'
+const staticVersion = 'V3.3'
+const offlineVersion = 'V2.5'
 
-const staticCacheName = 'staticfiles' + staticVersion;
-const offlinePageCache = 'offlinepage' + offlineVersion;
+const staticCacheBase = 'staticfiles';
+const staticCacheName = staticCacheBase + staticVersion;
+const offlinePageBase = 'offlinepage'
+const offlinePageCache = offlinePageBase + offlineVersion;
 
 function handleInstallEvent(event) {
   const offlineEventUrl = "<%= Rails.application.routes.url_helpers.offline_events_path %>";
@@ -22,7 +24,7 @@ function handleActivateEvent(event) {
   event.waitUntil(async function() {
     const keys = await caches.keys();
     await Promise.all(keys.map(cacheName => {
-      if (cacheName != staticCacheName && cacheName != offlinePageCache) {
+      if (cacheName != staticCacheName && !cacheName.includes(offlinePageBase)) {
         return caches.delete(cacheName);
       }
     }));
@@ -35,8 +37,15 @@ function isYelpImg(request) {
   return request.url.includes('yelpcdn') && request.destination.includes('image')
 }
 
-// TODO: only create after event post or if user logs in and the offlinePageCache is a new version
 async function createOfflinePage() {
+  // Ensure we have only one offline page
+  const keys = await caches.keys();
+  await Promise.all(keys.map(cacheName => {
+    if (cacheName != offlinePageCache && !cacheName.includes(staticCacheBase)) {
+      return caches.delete(cacheName);
+    }
+  }));
+
   const offlineEventUrl = "<%= Rails.application.routes.url_helpers.offline_events_path %>";
   const cacheOpen = await caches.open(offlinePageCache);
   await cacheOpen.add(new Request(offlineEventUrl, { headers: {Accept: 'text/html'}, credentials: 'same-origin'}));
