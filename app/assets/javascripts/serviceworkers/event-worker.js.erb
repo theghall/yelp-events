@@ -48,6 +48,10 @@ async function createOfflinePage() {
 
   const offlineEventUrl = "<%= Rails.application.routes.url_helpers.offline_events_path %>";
   const cacheOpen = await caches.open(offlinePageCache);
+  // This call requires user to be logged in.  Both current paths here offer a reasonable certainity for that to hold.
+  // If not this call incurs a redirect by Devise which will result in the browser rejecting the redirect
+  // Could add redirect: 'follow' to the options but if user was logged off that would result in the offline page
+  // being the login page
   await cacheOpen.add(new Request(offlineEventUrl, { headers: {Accept: 'text/html'}, credentials: 'same-origin'}));
 }
 
@@ -88,6 +92,7 @@ function handleMessageEvent(event) {
   event.waitUntil( async function() {
     switch (event.data) {
       case 'create offline page':
+        // serviceworker-companion.js sends this message after user logs in
         await createOfflinePage();
         break;
       default:
