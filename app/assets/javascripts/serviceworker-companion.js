@@ -27,7 +27,6 @@ async function registerWorker() {
         console.log('event-worker registered', installed);
         if (navigator.serviceWorker.controller) {
           // Recreate the offline page when user logs in
-          // TODO: restrict to root page
           window.addEventListener('load', sendCreateOfflinePageMessage);
           window.addEventListener('turbolinks:load', sendCreateOfflinePageMessage);
         }
