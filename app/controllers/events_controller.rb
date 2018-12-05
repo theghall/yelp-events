@@ -8,7 +8,6 @@ class EventsController < ApplicationController
   def index
 
   @response = search(yelp_params[:category], yelp_params[:zip])
-
   if (@response["total"] == 0)
     flash[:notice] = "No events were found matching that search criteria"
     return
@@ -68,8 +67,8 @@ class EventsController < ApplicationController
         end_date = nil
         end_time = nil
       else
-        end_date = response['time_end'].split(' ')[0]
-        end_time = response['time_end'].split(' ')[1]
+        end_date = response['time_end'].split('T')[0]
+        end_time = response['time_end'].split('T')[1]
       end
 
       current_user.yelp_events.build(
@@ -79,8 +78,8 @@ class EventsController < ApplicationController
         description: response['description'],
         display_address: response['location']['display_address'][0],
         image_url: response['image_url'],
-        start_date: response['time_start'].split(' ')[0],
-        start_time: response['time_start'].split(' ')[1],
+        start_date: response['time_start'].split('T')[0],
+        start_time: response['time_start'].split('T')[1],
         end_date: end_date,
         end_time: end_time,
         cancelled: cancelled,

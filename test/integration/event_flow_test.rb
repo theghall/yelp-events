@@ -39,7 +39,7 @@ class EventFlowTest < ActionDispatch::IntegrationTest
       'Authorization'=>"#{authorization}",
       'Connection'=>'close',
       'Host'=>'api.yelp.com',
-      'User-Agent'=>'http.rb/3.3.0',
+      'User-Agent'=>'http.rb/4.0.0',
       }).
       to_return(status: 200, body: JSON.generate(yelp_event), headers: {'ContentType' => 'application/json'})
 
@@ -58,10 +58,10 @@ class EventFlowTest < ActionDispatch::IntegrationTest
     assert_equal event_data[:name], event_rec.name
     assert_equal event_data[:location][:display_address][0], event_rec.display_address
     assert_equal event_data[:image_url], event_rec.image_url
-    assert_equal event_data[:time_start].split(' ')[0], event_rec.start_date
-    assert_equal event_data[:time_start].split(' ')[1], event_rec.start_time
-    assert_equal event_data[:time_end].split(' ')[0], event_rec.end_date
-    assert_equal event_data[:time_end].split(' ')[1], event_rec.end_time
+    assert_equal event_data[:time_start].split('T')[0], event_rec.start_date
+    assert_equal event_data[:time_start].split('T')[1], event_rec.start_time
+    assert_equal event_data[:time_end].split('T')[0], event_rec.end_date
+    assert_equal event_data[:time_end].split('T')[1], event_rec.end_time
     assert_equal event_data[:is_canceled], event_rec.cancelled
     assert_equal event_data[:cost], event_rec.cost
     assert_equal event_data[:is_free], event_rec.is_free
@@ -82,7 +82,7 @@ class EventFlowTest < ActionDispatch::IntegrationTest
       'Authorization'=>"#{authorization}",
       'Connection'=>'close',
       'Host'=>'api.yelp.com',
-      'User-Agent'=>'http.rb/3.3.0',
+      'User-Agent'=>'http.rb/4.0.0',
       }).
       to_return(status: 200, body: JSON.generate(yelp_event), headers: {'ContentType' => 'application/json'})
 

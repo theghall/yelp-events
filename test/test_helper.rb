@@ -26,8 +26,8 @@ class ActiveSupport::TestCase
       "longitude": -122.2665892,
       "name": "Saucy Oakland | Restaurant Pop-Up",
       "tickets_url": "https://www.eventbrite.com/e/saucy-oakland-restaurant-pop-up-tickets-36287157866?aff=es2#tickets",
-      "time_end": "2017-08-19 04:00",
-      "time_start": "2017-08-19 01:00",
+      "time_end": "2017-08-19T04:00",
+      "time_start": "2017-08-19T01:00",
       "location": {
         "address1": "35 Grand Ave",
         "address2": "",
