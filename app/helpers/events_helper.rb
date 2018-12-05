@@ -31,14 +31,14 @@ module EventsHelper
   def format_date_time(starts, ends)
     no_end = ends.nil?
 
-    s_date_time = starts.split(' ')
+    s_date_time = starts.split('T')
     s_date = s_date_time[0].split('-')
     s_time = s_date_time[1].split(':');
 
     start_date_time = DateTime.new(s_date[0].to_i, s_date[1].to_i, s_date[2].to_i, s_time[0].to_i, s_time[1].to_i)
 
     if !no_end
-      e_date_time = ends.split(' ')
+      e_date_time = ends.split('T')
       e_date = e_date_time[0].split('-')
       e_time = e_date_time[1].split(':');
 
