@@ -39,7 +39,7 @@ class EventFlowTest < ActionDispatch::IntegrationTest
       'Authorization'=>"#{authorization}",
       'Connection'=>'close',
       'Host'=>'api.yelp.com',
-      'User-Agent'=>'http.rb/4.0.0',
+      'User-Agent'=>'http.rb/4.1.1',
       }).
       to_return(status: 200, body: JSON.generate(yelp_event), headers: {'ContentType' => 'application/json'})
 
@@ -82,7 +82,7 @@ class EventFlowTest < ActionDispatch::IntegrationTest
       'Authorization'=>"#{authorization}",
       'Connection'=>'close',
       'Host'=>'api.yelp.com',
-      'User-Agent'=>'http.rb/4.0.0',
+      'User-Agent'=>'http.rb/4.1.1',
       }).
       to_return(status: 200, body: JSON.generate(yelp_event), headers: {'ContentType' => 'application/json'})
 
