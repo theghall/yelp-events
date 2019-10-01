@@ -1,10 +1,8 @@
 const staticVersion = 'V3.3'
-const offlineVersion = 'V2.5'
 
 const staticCacheBase = 'staticfiles';
 const staticCacheName = staticCacheBase + staticVersion;
-const offlinePageBase = 'offlinepage'
-const offlinePageCache = offlinePageBase + offlineVersion;
+const offlinePageCache = 'offlinepage'
 
 function handleInstallEvent(event) {
   const offlineEventUrl = "<%= Rails.application.routes.url_helpers.offline_events_path %>";
@@ -38,14 +36,6 @@ function isYelpImg(request) {
 }
 
 async function createOfflinePage() {
-  // Ensure we have only one offline page
-  const keys = await caches.keys();
-  await Promise.all(keys.map(cacheName => {
-    if (cacheName != offlinePageCache && !cacheName.includes(staticCacheBase)) {
-      return caches.delete(cacheName);
-    }
-  }));
-
   const offlineEventUrl = "<%= Rails.application.routes.url_helpers.offline_events_path %>";
   const cacheOpen = await caches.open(offlinePageCache);
   // This call requires user to be logged in.  Both current paths here offer a reasonable certainity for that to hold.

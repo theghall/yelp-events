@@ -23,8 +23,7 @@ async function registerWorker() {
   if (navigator.serviceWorker) {
     try {
         const reg = await navigator.serviceWorker.register('/event-worker.js', { scope: '/'});
-        const installed = await reg;
-        console.log('event-worker registered', installed);
+        // Is page being controlled by a service worker
         if (navigator.serviceWorker.controller) {
           // Recreate the offline page when user logs in
           window.addEventListener('load', sendCreateOfflinePageMessage);
