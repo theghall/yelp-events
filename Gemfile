@@ -27,7 +27,7 @@ gem 'turbolinks', '~> 5'
 gem 'bootsnap', '>= 1.1.0', require: false
 
 #authentication
-gem 'devise', '4.4.3'
+gem 'devise', '4.7.1'
 gem 'omniauth-facebook', '5.0.0'
 
 gem 'yelp', require: 'yelp'
